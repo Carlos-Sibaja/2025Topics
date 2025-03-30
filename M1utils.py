@@ -13,30 +13,32 @@ def scrape_site(playwright, source, site_info, day):
     java_script_enabled=True
 )
     page = context.new_page()
-
-
-
     page.goto(site_info['url'], timeout=60000)
-    # page.wait_for_timeout(10000) 
-    page.wait_for_selector(site_info['selector'], timeout=15000)
+    page.mouse.wheel(0, 1000)
+    page.wait_for_timeout(2000)
 
-    # try:
-    #     # Espera explícita al selector
-    #     page.wait_for_selector(site_info['selector'], timeout=10000)
-    # except:
-    #     print(f"⚠️ No se encontraron artículos en {source}")
-    #     browser.close()
-    #     return []
+   
+    # page.wait_for_timeout(10000) 
+   # page.wait_for_selector(site_info['selector'], timeout=15000)
+
+    try:
+        # Espera explícita al selector
+        page.wait_for_selector(site_info['selector'], timeout=10000)
+    except:
+        print(f"⚠️ No se encontraron artículos en {source}")
+        browser.close()
+        return []
 
     news = []
     links = page.locator(site_info['selector']).all()
 
     for link in links:
-        title = link.inner_text().strip()
+        title = link.get_attribute('aria-label') or link.inner_text().strip()
         href = link.get_attribute('href')
 
         if href and title:
-            if not href.startswith('http'):
+            # Normalizar links relativos
+            if href.startswith('/'):
                 href = site_info['url'].split('/search')[0] + href
             news.append({
                 'date': day.strftime('%d.%m.%y'),
