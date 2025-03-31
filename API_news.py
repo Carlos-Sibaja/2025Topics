@@ -39,4 +39,9 @@ for article in all_articles['articles']:
     print(article['publishedAt'])
     print("-----")
 print("Sources:")
+for source in sources['sources']:
+    print(source['name'])
+    print(source['id'])
+    print(source['description'])
+    print("-----")
 
