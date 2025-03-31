@@ -25,7 +25,7 @@ all_articles = newsapi.get_everything(q='trump',
 # /v2/top-headlines/sources
 sources = newsapi.get_sources()
 
-# show results
+#show results
 print("Top Headlines:")
 for article in top_headlines['articles']:
     print(article['title'])
@@ -39,4 +39,5 @@ for article in all_articles['articles']:
     print(article['publishedAt'])
     print("-----")
 print("Sources:")
+
 

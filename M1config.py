@@ -20,11 +20,11 @@ news_sites = {
         'url': 'https://www.nytimes.com/search?query=trump',
         'selector': '.css-1l4w6pd a'
     },
-      'NPR': {
+    'NPR': {
         'url': 'https://www.npr.org/search?query=trump',
         'selector': '.title a'
     },
-        'CBS News': {
+    'CBS News': {
         'url': 'https://www.cbsnews.com/search/?q=trump',
         'selector': '.item__anchor'
     },
