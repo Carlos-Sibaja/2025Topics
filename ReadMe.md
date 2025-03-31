@@ -10,7 +10,7 @@ Instalación de dependencias	✅ Solo playwright install	Selenium necesita insta
 
 ## Recomendaciones de Nikhil
 
-1. No utilizar linear Regression, pero no hacerlo muy complicado porque sera menos preciso
+1. No utilizar linear Regression, pero no hacerlo muy complicado porque sera menos preciso (Random Forest)
 2. La prediccion debe ser mejor que 50%
 3. Obtener las noticias, analizarlas, sacar el sentiment, y luego obtener el stock market (NASDAQ) para tener una mejor variabilidad.
 4. Con eso poder analizar el cambio en el mercado
