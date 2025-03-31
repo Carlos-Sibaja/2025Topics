@@ -48,8 +48,11 @@ news_sites = {
    'Al Jazeera': {
         'url': 'https://www.aljazeera.com/search/trump',
         'selector': '.u-clickable-card__link'
+    },
+    'FOX News': {
+        'url': 'https://www.foxnews.com/search-results/search#q=trump',
+        'selector': '.title a'
     }
-
 
     #  Estás siendo bloqueado por un sistema anti-bot llamado DataDome
 #    'Reuters': {
@@ -61,28 +64,16 @@ news_sites = {
     #     'url': 'https://www.bloomberg.com/search?query=trump',
     #     'selector': 'div.storyItem a'
     #},
+    # Subscription
+    #    'The Times (UK)': {
+    #     'url': 'https://www.thetimes.co.uk/search?query=trump',
+    #     'selector': '.Item-headline a'
+    # },
 #   'Associated Press (AP)': {
 #         'url': 'https://apnews.com/search?q=trump',
 #         'selector': '.PagePromo a.Link'
 #     },
- 
-
- 
-   
-#     'FOX News': {
-#         'url': 'https://www.foxnews.com/search-results/search?q=trump',
-#         'selector': '.title a'
-#     },
-#     'The Times (UK)': {
-#         'url': 'https://www.thetimes.co.uk/search?query=trump',
-#         'selector': '.Item-headline a'
-#     },
-  
-#     'Deutsche Welle (DW English)': {
-#         'url': 'https://www.dw.com/en/search/trump',
-#         'selector': '.news a'
-#     },
-    # 'AFP': {
+    #  'AFP': {
     #     'url': 'https://www.afp.com/en/search/trump',
     #     'selector': '.afp-hm-link'
     # }
