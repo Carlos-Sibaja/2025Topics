@@ -23,6 +23,7 @@ all_articles = newsapi.get_everything(q='trump',
                                         page_size=100,
                                         page=1)
 # /v2/top-headlines/sources
+
 sources = newsapi.get_sources()
 
 #show results
