@@ -30,7 +30,7 @@ def main():
                 try:
                     news = scrape_site(playwright, source, site_info, day)
                     news_needed = 30 - len(collected)
-                    news = news[:min(2,news_needed)]
+                    news = news[:min(3,news_needed)]
                     collected.extend(news)
                     print(f"✅ {source}: {len(news)} articles collected")
                 except Exception as e:
@@ -45,8 +45,8 @@ def main():
     # Guardar CSV
     df = pd.DataFrame(all_news)
     df.drop_duplicates(subset='link', inplace=True)
-    df.to_csv('trump_news_week.csv', index=False)
-    print("\n📄 CSV saved as trump_news_week.csv")
+    df.to_json('trump_news_week.json', orient='records', lines=True)
+    print("\n📄 JSON saved as trump_news_week.json")
 
     # Mostrar Resumen Diario
     df_summary = pd.DataFrame(daily_summary)

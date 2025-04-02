@@ -20,11 +20,11 @@ news_sites = {
         'url': 'https://www.nytimes.com/search?query=trump',
         'selector': '.css-1l4w6pd a'
     },
-    'NPR': {
+      'NPR': {
         'url': 'https://www.npr.org/search?query=trump',
         'selector': '.title a'
     },
-    'CBS News': {
+        'CBS News': {
         'url': 'https://www.cbsnews.com/search/?q=trump',
         'selector': '.item__anchor'
     },
@@ -49,10 +49,23 @@ news_sites = {
         'url': 'https://www.aljazeera.com/search/trump',
         'selector': '.u-clickable-card__link'
     },
+    'Associated Press (AP)': {
+        'url': 'https://apnews.com/search?q=trump#nt=navsearch',
+        'selector': '.PagePromo a.Link'
+    },
     'FOX News': {
         'url': 'https://www.foxnews.com/search-results/search#q=trump',
         'selector': '.title a'
+    },
+    'AFP': {
+        'url': 'https://www.afp.com/en/search/node?keys=trump',
+        'selector': '.afp-hm-link'
+    },
+    'Google News': {
+        'url': 'https://news.google.com/search?q=trump&hl=en-US&gl=US&ceid=US%3Aen',
+        'selector': 'h3 a'
     }
+
 
     #  Estás siendo bloqueado por un sistema anti-bot llamado DataDome
 #    'Reuters': {
@@ -64,17 +77,18 @@ news_sites = {
     #     'url': 'https://www.bloomberg.com/search?query=trump',
     #     'selector': 'div.storyItem a'
     #},
-    # Subscription
-    #    'The Times (UK)': {
-    #     'url': 'https://www.thetimes.co.uk/search?query=trump',
-    #     'selector': '.Item-headline a'
-    # },
-#   'Associated Press (AP)': {
-#         'url': 'https://apnews.com/search?q=trump',
-#         'selector': '.PagePromo a.Link'
+  
+ 
+
+ 
+   
+#     'The Times (UK)': {
+#         'url': 'https://www.thetimes.co.uk/search?query=trump',
+#         'selector': '.Item-headline a'
 #     },
-    #  'AFP': {
-    #     'url': 'https://www.afp.com/en/search/trump',
-    #     'selector': '.afp-hm-link'
-    # }
+  
+#     'Deutsche Welle (DW English)': {
+#         'url': 'https://www.dw.com/en/search/trump',
+#         'selector': '.news a'
+#     },
 }
