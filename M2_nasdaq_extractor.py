@@ -15,8 +15,8 @@ import ta
 # Create a ticker object for NASDAQ Composite Index
 ticker = yf.Ticker("^IXIC")
 
-# Fetch historical data from January 1, 2021 to December 31, 2024
-nasdaq_data = ticker.history(start='2021-01-01', end='2024-12-31')
+# Fetch historical data from January 1, 2021 to march 2025
+nasdaq_data = ticker.history(start='2021-01-01', end='2025-03-31')
 
 # Display the raw data
 print("===== Raw NASDAQ Data =====")
