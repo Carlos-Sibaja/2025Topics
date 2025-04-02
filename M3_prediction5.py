@@ -180,3 +180,54 @@ table_data = {
 results_table = pd.DataFrame(table_data, index=metrics_list)
 print("Comparison of XGB Model Performance Metrics:")
 print(results_table)
+
+
+# ===============================
+# Additional: Train vs Test Evaluation (Base Model)
+# ===============================
+
+# Re-run Base Model to get training predictions
+df = data.copy()
+cols = ['Close', 'RSI', 'MACD', 'MACD_Signal', 'Bollinger_Width', 'MFI', 'EMA_20']
+for col in cols:
+    df[f'{col}_lag1'] = df[col].shift(1)
+df['Close_rolling_mean'] = df['Close_lag1'].rolling(window=3).mean()
+df.dropna(inplace=True)
+
+feature_cols = [col for col in df.columns if 'lag1' in col] + ['Close_rolling_mean']
+
+train = df.loc['2023-01-01':'2024-12-31']
+test = df.loc['2025-01-01':'2025-03-31']
+X_train, y_train = train[feature_cols], train['Close']
+X_test, y_test = test[feature_cols], test['Close']
+
+model = XGBRegressor(n_estimators=200, max_depth=5, learning_rate=0.05, 
+                     random_state=42, verbosity=0)
+model.fit(X_train, y_train)
+
+# Get train and test predictions
+pred_train = model.predict(X_train)
+pred_test = model.predict(X_test)
+
+# Compute metrics
+train_metrics = {
+    "MSE": mean_squared_error(y_train, pred_train),
+    "MAE": mean_absolute_error(y_train, pred_train),
+    "R2": r2_score(y_train, pred_train)
+}
+
+test_metrics = {
+    "MSE": mean_squared_error(y_test, pred_test),
+    "MAE": mean_absolute_error(y_test, pred_test),
+    "R2": r2_score(y_test, pred_test)
+}
+
+# Create a comparison table
+comparison_table = pd.DataFrame({
+    "Training": train_metrics,
+    "Testing": test_metrics,
+    "Difference": {k: train_metrics[k] - test_metrics[k] for k in train_metrics}
+})
+
+print("\n=== Train vs Test Performance (Base Model) ===")
+print(comparison_table)

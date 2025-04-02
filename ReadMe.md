@@ -41,6 +41,7 @@ Accuracy Direccional (DA): 40.68%
 - Run2 Normalization: apply standard scaling to features, even though normalization usually doesn't affect tree models.
 - Run3 Hyperparameter Tuning: adjusting parameters.
 
+### VERSION 5 RUN 1 
 ===== Dataset Loaded =====
 Comparison of Model Performance Metrics:
        Run1_Random       Run1_XGB    Run2_Random       Run2_XGB    Run3_Random       Run3_XGB
@@ -48,3 +49,10 @@ MSE  163878.034513  133087.179486  206080.031094  140075.662670  172516.136579  
 MAE     307.618926     284.699384     333.998888     297.742585     313.014860     544.001688
 R2        0.788510       0.828246       0.734047       0.819228       0.777362       0.482076
 DA       44.827586      48.275862      41.379310      41.379310      41.379310      44.827586
+
+Comparison of Overfitting-Prevention Model Performance Metrics:
+           XGB_Reg  XGB_Reg_Early      XGB_DART
+MSE  142680.927422   2.699171e+06  3.175299e+06
+MAE     295.395028   1.552046e+03  1.675053e+03
+R2        0.815865  -2.483373e+00 -3.097833e+00
+DA       44.827586   4.482759e+01  4.655172e+01
