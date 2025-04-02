@@ -17,3 +17,34 @@ Instalación de dependencias	✅ Solo playwright install	Selenium necesita insta
 5. Como pruebas, obtener las noticias de los ultimos 2-3 anos, entrenar el modelo
 6. Por otro lado obtener los stocks para el mismo periodo, entrenar el modelo solo con stocks
 7. Luego comparar si al juntar las noticias y stocks el modelo mejora o no
+
+
+
+
+## Optimization of the Regression Model.
+
+#### Round 1.
+#### ===== Indicadores de Calidad para Random Forest =====
+MSE (Error Cuadrático Medio): 206080.0311
+MAE (Error Absoluto Medio): 333.9989
+R² (Varianza Explicada): 0.7340
+Accuracy Direccional (DA): 40.68%
+
+#### ===== Indicadores de Calidad para XGBoost =====
+MSE (Error Cuadrático Medio): 140075.6627
+MAE (Error Absoluto Medio): 297.7426
+R² (Varianza Explicada): 0.8192
+Accuracy Direccional (DA): 40.68%
+
+
+- Run1 Feature Aggregation: add new features like moving averages or lags to the dataset.
+- Run2 Normalization: apply standard scaling to features, even though normalization usually doesn't affect tree models.
+- Run3 Hyperparameter Tuning: adjusting parameters.
+
+===== Dataset Loaded =====
+Comparison of Model Performance Metrics:
+       Run1_Random       Run1_XGB    Run2_Random       Run2_XGB    Run3_Random       Run3_XGB
+MSE  163878.034513  133087.179486  206080.031094  140075.662670  172516.136579  401325.344544
+MAE     307.618926     284.699384     333.998888     297.742585     313.014860     544.001688
+R2        0.788510       0.828246       0.734047       0.819228       0.777362       0.482076
+DA       44.827586      48.275862      41.379310      41.379310      41.379310      44.827586
