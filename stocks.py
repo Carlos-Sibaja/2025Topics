@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 ticker = yf.Ticker("AAPL")
 
 # Fetch historical stock data from January 1, 2020 to January 1, 2023
-historical_data = ticker.history(start='2023-01-01', end='2024-12-31')
+historical_data = ticker.history(start='2019-01-01', end='2024-12-31')
 
 # Display the retrieved data
 print(historical_data)

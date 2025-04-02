@@ -32,7 +32,7 @@ print(f"Target distribution:\n{df['Target'].value_counts(normalize=True) * 100}"
 features = [col for col in df.columns if ('lag' in col) or (col in ['Return', 'Volatility'])]
 
 # ===== Setup =====
-train = df.loc['2023-01-01':'2024-12-31']
+train = df.loc['2019-01-01':'2024-12-31']
 test = df.loc['2025-01-01':'2025-03-31']
 X_train, y_train = train[features], train['Target']
 
