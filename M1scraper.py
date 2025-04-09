@@ -12,7 +12,7 @@ def main():
     daily_summary = []
 
     today = datetime.now()
-    days = 1 # Días a buscar
+    days = 5 # Días a buscar
 
     with sync_playwright() as playwright:
         for i in range(days):
@@ -30,7 +30,7 @@ def main():
                 try:
                     news = scrape_site(playwright, source, site_info, day)
                     news_needed = 30 - len(collected)
-                    news = news[:min(3,news_needed)]
+                    news = news[:min(6,news_needed)]
                     collected.extend(news)
                     print(f"✅ {source}: {len(news)} articles collected")
                 except Exception as e:

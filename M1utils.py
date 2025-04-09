@@ -12,17 +12,14 @@ def scrape_site(playwright, source, site_info, day):
     java_script_enabled=True
 )
     page = context.new_page()
-    page.goto(site_info['url'], timeout=60000)
+    page.goto(site_info['url'], timeout=6000)
     page.mouse.wheel(0, 1000)
     page.wait_for_timeout(2000)
 
-   
-    # page.wait_for_timeout(10000) 
-   # page.wait_for_selector(site_info['selector'], timeout=15000)
 
     try:
         # Espera explícita al selector
-        page.wait_for_selector(site_info['selector'], timeout=10000)
+        page.wait_for_selector(site_info['selector'], timeout=8000)
     except:
         print(f"⚠️ No se encontraron artículos en {source}")
         browser.close()

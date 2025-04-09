@@ -77,11 +77,6 @@ news_sites = {
     #     'url': 'https://www.bloomberg.com/search?query=trump',
     #     'selector': 'div.storyItem a'
     #},
-  
- 
-
- 
-   
 #     'The Times (UK)': {
 #         'url': 'https://www.thetimes.co.uk/search?query=trump',
 #         'selector': '.Item-headline a'
