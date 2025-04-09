@@ -1,39 +1,61 @@
 # utils.py
 
-from datetime import datetime
+# M1utils.py
+# ===============================
+# Utility Functions for Scraping
+# ===============================
+
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 def scrape_site(playwright, source, site_info, day):
+    """
+    Scrape news articles from a specific news site for a given day.
+
+    Args:
+        playwright: Playwright instance.
+        source (str): Name of the news source (e.g., "Google News").
+        site_info (dict): Dictionary containing the URL and CSS selector.
+        day (datetime): The date to associate with the news articles.
+
+    Returns:
+        list: List of dictionaries containing date, title, source, and link.
+    """
+
+    # Launch a headless browser
     browser = playwright.chromium.launch(headless=True)
-    context = browser.new_context(
-    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36",
-    locale="en-US",
-    timezone_id="America/New_York",
-    viewport={"width": 1280, "height": 800},
-    java_script_enabled=True
-)
-    page = context.new_page()
-    page.goto(site_info['url'], timeout=6000)
-    page.mouse.wheel(0, 1000)
-    page.wait_for_timeout(2000)
+    page = browser.new_page()
 
-
+    # Go to the specified URL
     try:
-        # Espera explícita al selector
-        page.wait_for_selector(site_info['selector'], timeout=8000)
-    except:
-        print(f"⚠️ No se encontraron artículos en {source}")
+        page.goto(site_info['url'], timeout=60000)
+    except PlaywrightTimeoutError:
+        print(f"⚠ Timeout loading {site_info['url']}")
         browser.close()
         return []
 
+    # Scroll down multiple times to load more news
+    for _ in range(3):
+        page.mouse.wheel(0, 5000)
+        page.wait_for_timeout(1500)
+
+    # Wait for the news elements to appear
+    try:
+        page.wait_for_selector(site_info['selector'], timeout=10000)
+    except PlaywrightTimeoutError:
+        print(f"⚠ Selector not found for {source}")
+        browser.close()
+        return []
+
+    # Collect news elements
+    links = page.query_selector_all(site_info['selector'])
     news = []
-    links = page.locator(site_info['selector']).all()
 
     for link in links:
         title = link.get_attribute('aria-label') or link.inner_text().strip()
         href = link.get_attribute('href')
 
         if href and title:
-            # Normalizar links relativos
+            # If the link is relative, build the full link
             if href.startswith('/'):
                 href = site_info['url'].split('/search')[0] + href
             news.append({
@@ -43,11 +65,6 @@ def scrape_site(playwright, source, site_info, day):
                 'link': href
             })
 
-
-#  # Guardar el HTML para revisar
-#     with open(f"reuters_debug_{day.strftime('%d_%m_%y')}.html", "w", encoding="utf-8") as f:
-#         f.write(page.content())
-
-#     print("✅ Página guardada como HTML para inspección manual.")
     browser.close()
     return news
+

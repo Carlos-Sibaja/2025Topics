@@ -38,7 +38,7 @@ news_sites = {
     },    
     'Politico': {
     'url': 'https://www.politico.com/search?q=trump',
-    'selector': 'article.story-frag a'
+    'selector': 'article.story-frag figure a[href]'
   },
   
     'NBC': {
@@ -51,19 +51,19 @@ news_sites = {
     },
     'Associated Press (AP)': {
         'url': 'https://apnews.com/search?q=trump#nt=navsearch',
-        'selector': '.PagePromo a.Link'
+        'selector': '.PagePromo-title a.Link'
     },
     'FOX News': {
         'url': 'https://www.foxnews.com/search-results/search#q=trump',
         'selector': '.title a'
     },
-    'AFP': {
-        'url': 'https://www.afp.com/en/search/node?keys=trump',
-        'selector': '.afp-hm-link'
+    'The Washington Times': {
+        'url': 'https://www.washingtontimes.com/search/?q=trump',
+        'selector': '.article-headline a'
     },
-    'Google News': {
-        'url': 'https://news.google.com/search?q=trump&hl=en-US&gl=US&ceid=US%3Aen',
-        'selector': 'h3 a'
+    'The New York Post': {
+        'url': 'https://nypost.com/search/trump/',
+        'selector': '.entry-heading a'
     }
 
 

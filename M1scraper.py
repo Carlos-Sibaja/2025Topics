@@ -3,6 +3,7 @@
 import random
 import pandas as pd
 from datetime import datetime, timedelta
+from collections import defaultdict
 from playwright.sync_api import sync_playwright
 from M1config import news_sites
 from M1utils import scrape_site
@@ -11,48 +12,76 @@ def main():
     all_news = []
     daily_summary = []
 
-    today = datetime.now()
-    days = 5 # Días a buscar
+    # ===============================
+    # Set the fixed start date (March 31, 2025)
+    # ===============================
+    start_date = datetime(2025, 3, 31)
+    days = 2 # Number of days to go backwards
+    target_per_day = 76  # Target number of articles per day
+    target_per_source = 10  # 🎯 Max articles per source per day
 
     with sync_playwright() as playwright:
         for i in range(days):
-            day = today - timedelta(days=i)
+            day = start_date - timedelta(days=i)
             collected = []
+            source_counts = defaultdict(int)  # 🧠 Track how many articles per source
             sources = list(news_sites.items())
-            random.shuffle(sources)  # Aleatorizar orden de medios
+            random.shuffle(sources)
 
             print(f"\n🔍 Searching news for {day.strftime('%d.%m.%y')}")
 
             for source, site_info in sources:
-                if len(collected) >= 30:
-                    break
+                if len(collected) >= target_per_day:
+                    print(f"✅ Reached {target_per_day} articles for {day.strftime('%d.%m.%y')}. Moving to next day.")
+                    break  # 🚀 Total target reached
+
+                if source_counts[source] >= target_per_source:
+                    print(f"⚠️ Source limit reached for {source} ({target_per_source} articles)")
+                    continue  # 🚫 Skip if this source already reached its daily limit
 
                 try:
                     news = scrape_site(playwright, source, site_info, day)
-                    news_needed = 30 - len(collected)
-                    news = news[:min(6,news_needed)]
+                    remaining_day = target_per_day - len(collected)
+                    remaining_source = target_per_source - source_counts[source]
+                    fetch_limit = min(len(news), remaining_day, remaining_source)
+
+                    news = news[:fetch_limit]
                     collected.extend(news)
-                    print(f"✅ {source}: {len(news)} articles collected")
+                    source_counts[source] += len(news)
+
+                    print(f"✅ {source}: {len(news)} articles collected (Total: {len(collected)})")
                 except Exception as e:
                     print(f"❌ Error in {source}: {e}")
 
             if len(collected) == 0:
-                print(f"⚠ No news found for {day.strftime('%d.%m.%y')}")
+                print(f"⚠️ No news found for {day.strftime('%d.%m.%y')}")
 
             all_news.extend(collected)
             daily_summary.append({'date': day.strftime('%d.%m.%y'), 'count': len(collected)})
 
-    # Guardar CSV
-    df = pd.DataFrame(all_news)
-    df.drop_duplicates(subset='link', inplace=True)
-    df.to_json('trump_news_week.json', orient='records', lines=True)
-    print("\n📄 JSON saved as trump_news_week.json")
+    # ===============================
+    # Save News Dataset
+    # ===============================
 
-    # Mostrar Resumen Diario
+    df = pd.DataFrame(all_news)
+    df.to_csv('trump_news_week.csv', index=False)
+    print("\n📄 CSV saved as trump_news_week.csv")
+
+    # ===============================
+    # Prepare and Print Daily Summary
+    # ===============================
+
     df_summary = pd.DataFrame(daily_summary)
-    print("\n📊 News Collection Summary:")
+    df_summary['date'] = pd.to_datetime(df_summary['date'], format='%d.%m.%y', errors='coerce')
+    df_summary = df_summary.sort_values('date').reset_index(drop=True)
+    df_summary = df_summary.drop_duplicates(subset='date')
+
+    print("\n📊 News Collection Summary (sorted):")
     print(df_summary)
-    print("\nTotal articles collected:", len(all_news))
+
+    df_summary.to_csv('daily_news_summary.csv', index=False)
+
+    print("\nTotal articles collected:", len(df))
 
 if __name__ == "__main__":
     main()
