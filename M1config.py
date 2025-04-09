@@ -32,14 +32,14 @@ news_sites = {
         'url': 'https://abcnews.go.com/search?searchtext=trump',
         'selector': '.ContentRoll__Headline a'
     },   
-    'Financial Times': {
-        'url': 'https://www.ft.com/search?q=trump',
-        'selector': '.o-teaser__heading a'
-    },    
-    'Politico': {
-    'url': 'https://www.politico.com/search?q=trump',
-    'selector': 'article.story-frag figure a[href]'
-  },
+    # 'Financial Times': {
+    #     'url': 'https://www.ft.com/search?q=trump',
+    #     'selector': '.o-header__mega-link'
+    # },    
+#     'Politico': {
+#     'url': 'https://www.politico.com/search?q=trump',
+#     'selector': 'article.story-frag figure a[href]'
+#   },
   
     'NBC': {
         'url': 'https://www.nbcnews.com/search?q=trump',
@@ -57,13 +57,13 @@ news_sites = {
         'url': 'https://www.foxnews.com/search-results/search#q=trump',
         'selector': '.title a'
     },
-    'The Washington Times': {
-        'url': 'https://www.washingtontimes.com/search/?q=trump',
-        'selector': '.article-headline a'
-    },
+    # 'The Washington Times': {
+    #     'url': 'https://www.washingtontimes.com/search/?q=trump',
+    #     'selector': '.gs-title a'
+    # },
     'The New York Post': {
         'url': 'https://nypost.com/search/trump/',
-        'selector': '.entry-heading a'
+        'selector': 'a[class^="postid-"]'
     }
 
 

@@ -1,4 +1,4 @@
-# scraper.py
+# M1scraper_resume.py
 
 import random
 import pandas as pd
@@ -7,24 +7,44 @@ from collections import defaultdict
 from playwright.sync_api import sync_playwright
 from M1config import news_sites
 from M1utils import scrape_site
+import os
 
 def main():
     all_news = []
     daily_summary = []
 
     # ===============================
-    # Set the fixed start date (March 31, 2025)
+    # Set Parameters
     # ===============================
-    start_date = datetime(2025, 3, 31)
-    days = 2 # Number of days to go backwards
-    target_per_day = 76  # Target number of articles per day
-    target_per_source = 10  # 🎯 Max articles per source per day
+    start_date = datetime(2025, 3, 31)   # 🛠️ Initial start date
+    days_to_scrape = 270  # 9 months approx
+    target_per_day = 33
+    target_per_source = 12
 
+    # ===============================
+    # Check Resume Point
+    # ===============================
+    resume_from_date = start_date
+    if os.path.exists('daily_news_summary.csv'):
+        try:
+            df_summary = pd.read_csv('daily_news_summary.csv')
+            df_summary['date'] = pd.to_datetime(df_summary['date'], errors='coerce')
+            last_scraped_date = df_summary['date'].max()
+            resume_from_date = last_scraped_date - timedelta(days=1)
+            print(f"🔄 Resuming from {resume_from_date.strftime('%d.%m.%Y')}")
+        except Exception as e:
+            print(f"⚠️ Warning: Could not read resume file, starting fresh. {e}")
+    else:
+        print(f"🆕 No previous summary found. Starting fresh from {start_date.strftime('%d.%m.%Y')}")
+
+    # ===============================
+    # Start Scraping
+    # ===============================
     with sync_playwright() as playwright:
-        for i in range(days):
-            day = start_date - timedelta(days=i)
+        for i in range(days_to_scrape):
+            day = resume_from_date - timedelta(days=i)
             collected = []
-            source_counts = defaultdict(int)  # 🧠 Track how many articles per source
+            source_counts = defaultdict(int)
             sources = list(news_sites.items())
             random.shuffle(sources)
 
@@ -33,11 +53,10 @@ def main():
             for source, site_info in sources:
                 if len(collected) >= target_per_day:
                     print(f"✅ Reached {target_per_day} articles for {day.strftime('%d.%m.%y')}. Moving to next day.")
-                    break  # 🚀 Total target reached
+                    break
 
                 if source_counts[source] >= target_per_source:
-                    print(f"⚠️ Source limit reached for {source} ({target_per_source} articles)")
-                    continue  # 🚫 Skip if this source already reached its daily limit
+                    continue
 
                 try:
                     news = scrape_site(playwright, source, site_info, day)
@@ -56,32 +75,23 @@ def main():
             if len(collected) == 0:
                 print(f"⚠️ No news found for {day.strftime('%d.%m.%y')}")
 
-            all_news.extend(collected)
-            daily_summary.append({'date': day.strftime('%d.%m.%y'), 'count': len(collected)})
+            # Save day result
+            df_day = pd.DataFrame(collected)
+            if not df_day.empty:
+                if os.path.exists('trump_news_week.csv'):
+                    df_day.to_csv('trump_news_week.csv', mode='a', index=False, header=False)
+                else:
+                    df_day.to_csv('trump_news_week.csv', index=False)
 
-    # ===============================
-    # Save News Dataset
-    # ===============================
+            # Update daily summary
+            daily_summary.append({'date': day.strftime('%d.%m.%Y'), 'count': len(collected)})
+            df_summary = pd.DataFrame(daily_summary)
+            df_summary['date'] = pd.to_datetime(df_summary['date'], format='%d.%m.%Y', errors='coerce')
+            df_summary = df_summary.sort_values('date').drop_duplicates(subset='date')
+            df_summary.to_csv('daily_news_summary.csv', index=False)
 
-    df = pd.DataFrame(all_news)
-    df.to_csv('trump_news_week.csv', index=False)
-    print("\n📄 CSV saved as trump_news_week.csv")
-
-    # ===============================
-    # Prepare and Print Daily Summary
-    # ===============================
-
-    df_summary = pd.DataFrame(daily_summary)
-    df_summary['date'] = pd.to_datetime(df_summary['date'], format='%d.%m.%y', errors='coerce')
-    df_summary = df_summary.sort_values('date').reset_index(drop=True)
-    df_summary = df_summary.drop_duplicates(subset='date')
-
-    print("\n📊 News Collection Summary (sorted):")
-    print(df_summary)
-
-    df_summary.to_csv('daily_news_summary.csv', index=False)
-
-    print("\nTotal articles collected:", len(df))
+    print("\n✅ Scraping completed!")
+    print("\nTotal articles collected:", sum([d['count'] for d in daily_summary]))
 
 if __name__ == "__main__":
     main()
