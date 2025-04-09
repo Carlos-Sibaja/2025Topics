@@ -30,7 +30,7 @@ def main():
             df_summary = pd.read_csv('daily_news_summary.csv')
             df_summary['date'] = pd.to_datetime(df_summary['date'], errors='coerce')
             last_scraped_date = df_summary['date'].max()
-            resume_from_date = last_scraped_date - timedelta(days=1)
+            resume_from_date = last_scraped_date + timedelta(days=1)
             print(f"🔄 Resuming from {resume_from_date.strftime('%d.%m.%Y')}")
         except Exception as e:
             print(f"⚠️ Warning: Could not read resume file, starting fresh. {e}")
