@@ -100,7 +100,7 @@ nasdaq = nasdaq.join(sentiment_features)
 # ===============================
 # Save Updated NASDAQ
 # ===============================
-nasdaq.to_csv('nasdaq.csv')
+nasdaq.to_csv('nasdaq_roberto.csv')
 
-print("\n✅ Sentiment features successfully appended to 'nasdaq.csv'.")
+print("\n✅ Sentiment features successfully appended to 'nasdaq_roberto.csv'.")
 print(nasdaq.tail(10))
