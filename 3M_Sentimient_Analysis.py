@@ -4,12 +4,14 @@
 # Import Libraries
 # ===============================
 import pandas as pd
-from textblob import TextBlob
-from datetime import datetime, timedelta
-import os
+import numpy as np
+from xgboost import XGBRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
 
 # ===============================
-# Load NASDAQ Data
+# Load the Enhanced NASDAQ Dataset
 # ===============================
 nasdaq = pd.read_csv('M1_nasdaq_data.csv', parse_dates=['Date'], index_col='Date')
 nasdaq.index = pd.to_datetime(nasdaq.index, utc=True)
@@ -17,71 +19,44 @@ nasdaq.index = nasdaq.index.tz_convert(None)
 nasdaq.index = nasdaq.index.normalize()  # Keep only date part
 
 # ===============================
-# Load News Content
+# Create Target Variable: Next Day's Closing Price
 # ===============================
-# news_df = pd.read_csv('news_content.csv')
-news_df = pd.read_csv(os.path.join('news_scraping', 'data', 'scraped_news.csv'), encoding='utf-8')
-
-# change name of column published_date to date
-news_df.rename(columns={'published_date': 'date'}, inplace=True)
-
-news_df.index = pd.to_datetime(news_df['date'], utc=True)
-news_df.index = news_df.index.tz_convert(None)
-news_df.index = news_df.index.normalize()  # Keep only date part
-
-# Convert 'date' to datetime
-# news_df['date'] = pd.to_datetime(news_df['date'], errors='coerce', utc=True)
-# news_df['date'] = news_df['date'].dt.tz_convert(None)  # Convert to naive datetime
-# # Normalize the date to remove time part
-# news_df['date'] = news_df['date'].dt.normalize()
+df['Target_Close'] = df['Close'].shift(-1)
+df.dropna(inplace=True)  # Drop last row with NaN target
 
 # ===============================
-# Move Saturday and Sunday news to Friday
+# Feature Selection
 # ===============================
-# def move_to_friday(d):
-#     if d.weekday() == 5:  # Saturday
-#         return d - timedelta(days=1)
-#     elif d.weekday() == 6:  # Sunday
-#         return d - timedelta(days=2)
-#     else:
-#         return d
+features = ['Open', 'High', 'Low', 'Close', 'Volume',
+            'Sentiment_T1', 'Sentiment_T2', 'Sentiment_T3', 'Sentiment_3DayAVG']
 
-# news_df['date'] = news_df['date'].apply(move_to_friday)
-for date in news_df.index:
-    weekday = date.weekday()
-    if weekday == 5:  # Saturday
-        new_date = date - timedelta(days=1)
-        news_df.loc[date, 'date'] = new_date
-    elif weekday == 6:  # Sunday
-        new_date = date - timedelta(days=2)
-        news_df.loc[date, 'date'] = new_date
+X = df[features]
+y = df['Target_Close']
 
 # ===============================
-# Calculate Sentiment
+# Train-Test Split
 # ===============================
-def calculate_sentiment(text):
-    if not isinstance(text, str) or text.strip() == '':
-        return 0
-    return TextBlob(text).sentiment.polarity
-
-news_df['content_sentiment'] = news_df['description'].apply(calculate_sentiment)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
 
 # ===============================
-# Aggregate Daily Sentiment
+# Train XGBoost Regressor
 # ===============================
-daily_sentiment = news_df.groupby(news_df.index).agg(
-    Daily_Sentiment=('content_sentiment', 'mean'),
-    Article_Count=('content_sentiment', 'count')
-)
+model = XGBRegressor(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
+model.fit(X_train, y_train)
 
 # ===============================
-# Print Summary
+# Predict and Evaluate
 # ===============================
-print("\n📊 Daily Sentiment Summary (After Moving Weekend to Friday):")
-print(daily_sentiment)
+y_pred = model.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"\n📈 Mean Squared Error: {mse:.4f}")
+print(f"🧮 R^2 Score: {r2:.4f}")
 
 # ===============================
-# Build Sentiment Features for NASDAQ Dates
+# Plot Actual vs Predicted
 # ===============================
 sentiment_features = pd.DataFrame(index=nasdaq.index)
 
