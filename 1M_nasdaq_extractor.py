@@ -106,7 +106,7 @@ print(list(nasdaq_data.columns))
 # ===============================
 # Save dataframe to CSV
 # ===============================
-nasdaq_data.to_csv('nasdaq_data.csv')
+nasdaq_data.to_csv('1M_nasdaq_data.csv')
 print("\n'nasdaq_data.csv' saved successfully!")
 
 # ===============================

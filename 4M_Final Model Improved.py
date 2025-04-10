@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore')
 # ===============================
 # Load Dataset
 # ===============================
-data = pd.read_csv('nasdaq_data.csv', parse_dates=['Date'], index_col='Date')
+data = pd.read_csv('3M_nasdaq_sentiment.csv', parse_dates=['Date'], index_col='Date')
 data.index = pd.to_datetime(data.index, utc=True)
 data.index = data.index.tz_convert(None)
 data = data.drop(columns=['Close_Predicted_RF', 'Close_Predicted_XGB'], errors='ignore')
@@ -57,16 +57,17 @@ print(f"Target distribution:\n{df['Target'].value_counts(normalize=True) * 100}"
 # Select Features
 # ===============================
 selected_features = [
-    'Close_lag1', 'Close_lag2', 'RSI_lag1', 'RSI_lag2',
-    'MACD_lag1', 'MACD_lag2', 'MFI_lag1', 'MFI_lag2',
+    'Close_lag1', 'Close_lag2',
     'Volatility', 'OBV', 'ATR_14', 'ADX_14',
-    'VWAP_lag1', 'VWAP_lag2'
+    'VWAP_lag1', 'VWAP_lag2', 'Sentiment_T1_new',
+    'Sentiment_T2_new', 'Sentiment_T3_new', 'Sentiment_3DayAVG_new',
 ]
+
 
 # ===============================
 # Split Train / Validation / Real
 # ===============================
-train = df.loc['2022-01-01':'2023-12-31']
+train = df.loc['2023-01-01':'2023-12-31']
 val = df.loc['2024-01-01':'2024-12-31']
 real = df.loc['2025-01-01':'2025-03-31']
 
@@ -88,7 +89,7 @@ def get_classification_metrics(y_true, y_pred):
 # ===============================
 # Train Model
 # ===============================
-print(f"\n=== MODEL: ALL VARIABLES ===")
+print(f"\n=== MODEL: Final Version ===")
 scale_pos_weight = (y_train == 0).sum() / (y_train == 1).sum()
 
 model = XGBClassifier(
@@ -128,7 +129,7 @@ result = pd.DataFrame({
     "Validation (2024)": get_classification_metrics(y_val, pred_val),
     "Real Prediction (2025)": get_classification_metrics(y_real, pred_real)
 })
-print("\n===== Final Model Performance ALL VARAIBLES =====")
+print("\n===== Final Model Performance =====")
 print(result)
 
 # ===============================

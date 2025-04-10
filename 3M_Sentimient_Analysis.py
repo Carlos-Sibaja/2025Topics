@@ -1,4 +1,4 @@
-#M1_Sentimient Analysis
+#Sentimient Analysis
 
 # ===============================
 # Import Libraries
@@ -11,7 +11,7 @@ import os
 # ===============================
 # Load NASDAQ Data
 # ===============================
-nasdaq = pd.read_csv('nasdaq_data.csv', parse_dates=['Date'], index_col='Date')
+nasdaq = pd.read_csv('M1_nasdaq_data.csv', parse_dates=['Date'], index_col='Date')
 nasdaq.index = pd.to_datetime(nasdaq.index, utc=True)
 nasdaq.index = nasdaq.index.tz_convert(None)
 nasdaq.index = nasdaq.index.normalize()  # Keep only date part
@@ -122,7 +122,7 @@ nasdaq = nasdaq.join(sentiment_features, rsuffix='_new')
 # ===============================
 # Save Updated NASDAQ
 # ===============================
-nasdaq.to_csv('nasdaq_roberto.csv')
+nasdaq.to_csv('3M_nasdaq_sentiment.csv')
 
 print("\n✅ Sentiment features successfully appended to 'nasdaq_roberto.csv'.")
 print(nasdaq.tail(10))

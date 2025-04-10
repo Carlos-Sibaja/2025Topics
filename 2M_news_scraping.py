@@ -35,7 +35,7 @@ df = pd.DataFrame(all_news)
 # df.to_csv('gnews.csv', index=False)
 # print("Data saved to gnews.csv")
 
-with open('gnews.csv', mode='a', newline='') as file:
+with open('2M_news_scraping.csv', mode='a', newline='') as file:
     writer = csv.writer(file)
     # Write new data row by row
     for index, row in df.iterrows():
