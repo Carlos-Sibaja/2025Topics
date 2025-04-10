@@ -20,11 +20,14 @@ news_df = pd.read_csv('news_trump_total.csv')
 # Convert 'date' column
 news_df['date'] = pd.to_datetime(news_df['date'], format='%d.%m.%y', errors='coerce')
 
+
 # ===============================
 # Filter only real articles
 # ===============================
 # Keep only links with /year/month/day/ structure
-news_df = news_df[news_df['link'].str.contains(r'/\d{4}/\d{2}/\d{2}/', regex=True, na=False)]
+#news_df = news_df[news_df['link'].str.contains(r'/\d{4}/\d{2}/\d{2}/', regex=True, na=False)]
+
+news_df = news_df[news_df['link'].str.contains(r'/\d{4}/', regex=True, na=False)]
 
 print(f"✅ Found {len(news_df)} real article links after cleaning.")
 
@@ -39,6 +42,8 @@ def fetch_article_text(row):
         article.download()
         article.parse()
         text = article.text
+        if not text.strip():
+            raise ValueError("Empty content")
     except Exception as e:
         print(f"❌ Failed to fetch {url}: {e}")
         text = ""
@@ -57,7 +62,7 @@ if os.path.exists(partial_file):
     os.remove(partial_file)
 
 # Create ThreadPoolExecutor
-with ThreadPoolExecutor(max_workers=20) as executor:  # 20 workers for your strong machine
+with ThreadPoolExecutor(max_workers=50) as executor:  # 20 workers for your strong machine
     futures = [executor.submit(fetch_article_text, row) for idx, row in news_df.iterrows()]
     
     for idx, future in enumerate(tqdm(as_completed(futures), total=len(futures), desc="Fetching Articles")):
@@ -76,5 +81,5 @@ with ThreadPoolExecutor(max_workers=20) as executor:  # 20 workers for your stro
 # Final Save
 # ===============================
 results_df = pd.DataFrame(results)
-results_df.to_csv('news_content.csv', index=False)
+results_df.to_csv('news_contentCARLOS.csv', index=False)
 print("\n✅ All articles saved successfully to 'news_content.csv'.")
