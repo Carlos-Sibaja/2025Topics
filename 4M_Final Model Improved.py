@@ -56,11 +56,17 @@ print(f"Target distribution:\n{df['Target'].value_counts(normalize=True) * 100}"
 # ===============================
 # Select Features
 # ===============================
+# selected_features = [
+#     'Close_lag1', 'Close_lag2',
+#     'Volatility', 'OBV', 'ATR_14', 'ADX_14',
+#     'VWAP_lag1', 'VWAP_lag2', 'Sentiment_T1_new',
+#     'Sentiment_T2_new', 'Sentiment_T3_new', 'Sentiment_3DayAVG_new',
+# ]
+
 selected_features = [
-    'Close_lag1', 'Close_lag2',
+    'Close_lag2',
     'Volatility', 'OBV', 'ATR_14', 'ADX_14',
-    'VWAP_lag1', 'VWAP_lag2', 'Sentiment_T1_new',
-    'Sentiment_T2_new', 'Sentiment_T3_new', 'Sentiment_3DayAVG_new',
+    'VWAP_lag1', 'VWAP_lag2', 'Sentiment_3DayAVG_new',
 ]
 
 
@@ -117,7 +123,7 @@ pred_val = model.predict(X_val)
 
 # For Real Prediction 2025, use Threshold 0.45
 y_real_proba = model.predict_proba(X_real)[:, 1]
-threshold = 0.40
+threshold = 0.49
 pred_real = (y_real_proba > threshold).astype(int)
 print(threshold)
 
