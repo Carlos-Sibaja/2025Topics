@@ -16,8 +16,8 @@ def main():
     # ===============================
     # Set Parameters
     # ===============================
-    start_date = datetime(2025, 3, 31)   # 🛠️ Initial start date
-    days_to_scrape = 270  # 9 months approx
+    start_date = datetime(2025, 2, 4)   # 🛠️ Initial start date
+    days_to_scrape = 1  # 9 months approx
     target_per_day = 33
     target_per_source = 12
 

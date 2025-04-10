@@ -10,7 +10,7 @@ def scrape_site(playwright, source, site_info, day):
     page = browser.new_page()
 
     try:
-        page.goto(site_info['url'], timeout=60000)
+        page.goto(site_info['url'], timeout=6000)
     except PlaywrightTimeoutError:
         print(f"⚠ Timeout loading {site_info['url']}")
         browser.close()
@@ -19,10 +19,10 @@ def scrape_site(playwright, source, site_info, day):
     # Scroll down multiple times
     for _ in range(3):
         page.mouse.wheel(0, 5000)
-        page.wait_for_timeout(15000)
+        page.wait_for_timeout(5000)
 
     try:
-        page.wait_for_selector(site_info['selector'], timeout=10000)
+        page.wait_for_selector(site_info['selector'], timeout=5000)
     except PlaywrightTimeoutError:
         print(f"⚠ Selector not found for {source}")
         browser.close()
