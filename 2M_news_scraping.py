@@ -31,10 +31,6 @@ for news in results:
 # Convert to a Pandas DataFrame
 df = pd.DataFrame(all_news)
 
-# Save to CSV
-# df.to_csv('gnews.csv', index=False)
-# print("Data saved to gnews.csv")
-
 with open('2M_news_scraping.csv', mode='a', newline='') as file:
     writer = csv.writer(file)
     # Write new data row by row
