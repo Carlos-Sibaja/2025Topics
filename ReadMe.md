@@ -1,7 +1,7 @@
 # **News Sentiment and Stock Market Prediction**
 
 <p align="center">
-  <img src="98_images/Cover.png" alt="Project Cover" width="500">
+  <img src="98_Images/Cover.png" alt="Project Cover" width="500">
 </p>
 
 ## **Executive Summary**
@@ -137,7 +137,7 @@ Improve stock market prediction beyond traditional technical analysis by incorpo
 ---
 
 ## **Authors**
-- **Roberto Carlos Escalante** – ID 300383075
+- **Roberto Escalante Gafau** – ID 300383075
 - **Carlos Sibaja Jiménez** – ID 300384848
 
 ---
