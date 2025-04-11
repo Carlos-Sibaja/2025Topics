@@ -1,7 +1,7 @@
 # **News Sentiment and Stock Market Prediction**
 
 <p align="center">
-  <img src="98_images/cover.png" alt="Project Cover" width="500">
+  <img src="98_images/Cover.png" alt="Project Cover" width="500">
 </p>
 
 ## **Executive Summary**
