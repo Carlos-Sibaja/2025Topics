@@ -64,12 +64,9 @@ selected_features = [
     'Volatility', 'OBV', 
     'ATR_14', 'ADX_14',
     'VWAP_lag1', 'VWAP_lag2',
-    'Sentiment_T1_new','Sentiment_T2_new', 'Sentiment_T3_new',
-    'Sentiment_3DayAVG_new',
+    'Sentiment_T1','Sentiment_T2', 'Sentiment_T3',
+    'Sentiment_3DayAVG',
 ]
-
-
-
 
 # ===============================
 # Split Train / Validation / Real
@@ -122,7 +119,7 @@ model.fit(X_train, y_train)
 pred_train = model.predict(X_train)
 pred_val = model.predict(X_val)
 
-# For Real Prediction 2025, use Threshold 0.40
+# For Real Prediction 2025, adjust the threshold
 y_real_proba = model.predict_proba(X_real)[:, 1]
 threshold = 0.50
 pred_real = (y_real_proba > threshold).astype(int)
