@@ -113,7 +113,7 @@ Improve stock market prediction beyond traditional technical analysis by incorpo
 ---
 
 ## **Technical Variables Selected and Why**
-| **Feature**            | **Reason for Selection**                                                        |
+| **Feature**            | **Reason for Selection**                                                       |
 |-------------------------|---------------------------------------------------------------------------------|
 | `Close_lag2`           | Capture price omentum.                                                        |
 | `Volatility`           | Measure market  variability.                                                    |
