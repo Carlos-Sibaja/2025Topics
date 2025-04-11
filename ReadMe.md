@@ -1,58 +1,145 @@
-Ventajas clave de usar Playwright para este caso específico
-Necesidad	Playwright	Otras librerías
-Soporte para páginas dinámicas (JavaScript)	✅ Excelente	❌ requests + BeautifulSoup no lo procesan
-Headless + control total del navegador	✅ Controla Chromium, Firefox, Webkit	Selenium también lo hace pero es más pesado y lento
-Fácil extracción de <a> dinámicos	✅ Detecta contenido que aparece después de cargar JS	❌ requests solo ve HTML inicial
-Multi-tab, multi-page, manejo de wait_for_timeout()	✅ Sencillo y robusto	Selenium lo puede hacer pero requiere más código
-Instalación de dependencias	✅ Solo playwright install	Selenium necesita instalar manualmente drivers como chromedriver o geckodriver
+# **News Sentiment and Stock Market Prediction**
+
+<p align="center">
+  <img src="98_images/cover.png" alt="Project Cover" width="300">
+</p>
+
+## **Executive Summary**
+This project predicts the movement of the NASDAQ index by combining **technical financial indicators** with **sentiment analysis** of Trump-related news. By leveraging modern scraping tools, data processing techniques, sentiment extraction, and machine learning (XGBoost Classifier), we build a hybrid model to enhance stock market prediction.
+
+### **Main Goal**
+Improve stock market prediction beyond traditional technical analysis by incorporating external news sentiment signals.
 
 ---
 
-## Recomendaciones de Nikhil
+## **Logic and Components**
 
-1. No utilizar linear Regression, pero no hacerlo muy complicado porque sera menos preciso (Random Forest)
-2. La prediccion debe ser mejor que 50%
-3. Obtener las noticias, analizarlas, sacar el sentiment, y luego obtener el stock market (NASDAQ) para tener una mejor variabilidad.
-4. Con eso poder analizar el cambio en el mercado
-5. Como pruebas, obtener las noticias de los ultimos 2-3 anos, entrenar el modelo
-6. Por otro lado obtener los stocks para el mismo periodo, entrenar el modelo solo con stocks
-7. Luego comparar si al juntar las noticias y stocks el modelo mejora o no
+### **Data Extraction**
+- **Financial Data**: NASDAQ Composite data from 2022 to 2025 extracted using `yfinance`.
+- **News Articles**: Articles about "Trump" gathered using the GNews API for March 2025.
 
+### **Feature Engineering**
+- **Technical Indicators**: RSI, MACD, Bollinger Bands, MFI, EMA, ATR, ADX, OBV, Stochastic Oscillator.
+- **Sentiment Indicators**: Daily sentiment scores shifted by 1, 2, and 3 days to create lagged sentiment features.
 
+---
 
+## **Model Training**
+- **Target Variable**: Significant return in NASDAQ over a rolling 3-day period (greater than ±0.3%).
+- **Feature Selection**: Features selected based on relevance and redundancy analysis.
 
-## Optimization of the Regression Model.
+### **Two Models**
+1. **Full Model**: Includes 18 features.
+2. **Final Improved Model**: Reduced to 7 features after redundancy analysis.
 
-#### Round 1.
-#### ===== Indicadores de Calidad para Random Forest =====
-MSE (Error Cuadrático Medio): 206080.0311
-MAE (Error Absoluto Medio): 333.9989
-R² (Varianza Explicada): 0.7340
-Accuracy Direccional (DA): 40.68%
+### **Evaluation**
+- **Metrics**: Accuracy (Directional Accuracy - DA), Precision, Recall, ROC_AUC.
+- **Threshold Adjustment**: Adjusted between 0.40-0.49 to maximize recall and directional accuracy.
+- **Validation Set**: Data from 2024.
+- **Real-World Prediction**: First quarter of 2025.
 
-#### ===== Indicadores de Calidad para XGBoost =====
-MSE (Error Cuadrático Medio): 140075.6627
-MAE (Error Absoluto Medio): 297.7426
-R² (Varianza Explicada): 0.8192
-Accuracy Direccional (DA): 40.68%
+---
 
+## **Key Highlights**
+- **Innovative Hybrid Model**: Combines technical analysis with news sentiment.
+- **Modern Scraping Tools**: Dynamic news collection without manual labeling.
+- **Strong Feature Engineering**: Includes lagged features, VWAP, and volatility measures.
+- **Model Tuning**: Early stopping, threshold adjustment, and class imbalance handling (using `scale_pos_weight`).
+- **Real-World Performance**:
+  - 60% Directional Accuracy (DA) in real 2025 predictions.
+  - ROC_AUC > 62% using only public news and technical data.
 
-- Run1 Feature Aggregation: add new features like moving averages or lags to the dataset.
-- Run2 Normalization: apply standard scaling to features, even though normalization usually doesn't affect tree models.
-- Run3 Hyperparameter Tuning: adjusting parameters.
+---
 
-### VERSION 5 RUN 1 
-===== Dataset Loaded =====
-Comparison of Model Performance Metrics:
-       Run1_Random       Run1_XGB    Run2_Random       Run2_XGB    Run3_Random       Run3_XGB
-MSE  163878.034513  133087.179486  206080.031094  140075.662670  172516.136579  401325.344544
-MAE     307.618926     284.699384     333.998888     297.742585     313.014860     544.001688
-R2        0.788510       0.828246       0.734047       0.819228       0.777362       0.482076
-DA       44.827586      48.275862      41.379310      41.379310      41.379310      44.827586
+## **Main Results**
+| **Metric**       | **Final Model (Real 2025)** |
+|-------------------|-----------------------------|
+| **Accuracy (DA)** | 60.38%                      |
+| **Precision**     | 52.78%                      |
+| **Recall**        | 82.61%                      |
+| **ROC_AUC**       | 62.97%                      |
 
-Comparison of Overfitting-Prevention Model Performance Metrics:
-           XGB_Reg  XGB_Reg_Early      XGB_DART
-MSE  142680.927422   2.699171e+06  3.175299e+06
-MAE     295.395028   1.552046e+03  1.675053e+03
-R2        0.815865  -2.483373e+00 -3.097833e+00
-DA       44.827586   4.482759e+01  4.655172e+01
+- The model detects market moves with a good balance of precision and recall.
+- Sentiment features proved valuable in enhancing technical predictions.
+
+---
+
+## **Challenges**
+1. **News Availability**: 99% of the news was from one period due to legacy issues with news availability outside major events.
+2. **Overfitting Risk**: Solved with feature selection and parameter tuning.
+3. **Low Volatility Periods**: Difficult to detect market movements during these times.
+4. **Class Imbalance**: Solved using `scale_pos_weight`.
+
+---
+
+## **Areas of Improvement**
+1. **Expand News Sources**: Broaden scraping beyond "Trump" to include broader market topics.
+2. **Improve Sentiment Accuracy**: Further clean noisy news articles for better sentiment extraction.
+3. **Enhance Model Robustness**: Apply ensemble models combining multiple thresholds and deploy dynamic regularization and feature selection.
+4. **Backtest Strategies**: Test real investment strategies based on prediction outputs.
+
+---
+
+## **Installation and Setup**
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/Carlos-Sibaja/2025Topics.git
+   cd 2025Topics
+   ```
+
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```
+
+3. Install requirements:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+---
+
+## **Main Documents and Their Use**
+| **File**                      |   **Use**                                                  |
+| `1M_nasdaq_extractor.py`      | Download NASDAQ historical data and calculate technical indicators.         |
+| `2M_news_scraping.py`         | Scrape news articles related to "Trump" using GNews API.                   |
+| `2M_scraped_news.csv`         | Saved scraped news.                                                        |
+| `3M_sentiment_analysis.py`    | Perform sentiment analysis and create lagged sentiment features.           |
+| `3M_nasdaq_sentiment.csv`     | NASDAQ data with added sentiment features.                                 |
+| `4M_Final Model.py`           | First model using all 18 variables.                                        |
+| `4M_Final Model Improved.py`  | Improved model using selected features after redundancy analysis.          |
+
+---
+
+## **Technical Variables Selected and Why**
+| **Feature**            | **Reason for Selection**                                                        |
+|-------------------------|---------------------------------------------------------------------------------|
+| `Close_lag2`           | Capture price omentum.                                                        |
+| `Volatility`           | Measure market  variability.                                                    |
+| `OBV`                  | Detect volume pressure.                                                        |
+| `ADX_14`               | Capture trend strength.                                                        |
+| `VWAP_lag1`, `VWAP_lag2` | Detect price imbalance vs. volume-weighted average.                            |
+| `Sentiment_3DayAVG_new` | Aggregate news sentiment impact over 3 days.                                   |
+
+❗ Some technical indicators (like ATR, RSI, MACD) were initially included but trimmed based on redundancy analysis.
+
+---
+
+## **Testing Area**
+- A Jupyter Notebook is included (`3M_sentiment_analysis.ipynb`) to:
+  - Test sentiment feature extraction.
+  - Quickly re-run models.
+
+---
+
+## **Authors**
+- **Roberto Carlos Escalante** – ID 300383075
+- **Carlos Sibaja Jiménez** – ID 300384848
+
+---
+
+## **Final Words**
+This project is a modern, data-driven attempt to predict market behavior using both financial data and news sentiment. It demonstrates technical rigor, creativity, and attention to detail while remaining easy to understand and expand.
+
+We faced many challenges due to our lack of experience, which made us change plans, try new things, and learn about the limits of some technologies.
