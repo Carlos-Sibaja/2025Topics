@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 # ===============================
 # Load Dataset
 # ===============================
-df = pd.read_csv('nasdaq_data.csv', parse_dates=['Date'], index_col='Date')
+df = pd.read_csv('1M_nasdaq_data.csv', parse_dates=['Date'], index_col='Date')
 df.index = pd.to_datetime(df.index, utc=True)
 df.index = df.index.tz_convert(None)
 
@@ -122,17 +122,17 @@ def evaluate_predictions(true, pred, name):
     r2 = r2_score(true, pred)
     da = np.mean((np.sign(true.diff()) == np.sign(pred.diff()))) * 100
 
-    print(f"\n===== Indicadores de Calidad para {name} =====")
-    print(f"MSE (Error Cuadrático Medio): {mse:.4f}")
-    print(f"MAE (Error Absoluto Medio): {mae:.4f}")
-    print(f"R² (Varianza Explicada): {r2:.4f}")
+    print(f"\n===== Quality Indicator for: {name} =====")
+    print(f"MSE: {mse:.4f}")
+    print(f"MAE: {mae:.4f}")
+    print(f"R²: {r2:.4f}")
     print(f"Accuracy Direccional (DA): {da:.2f}%")
 
 # ===============================
 # Evaluate both models
 # ===============================
 
-print("\n====== Evaluación de Modelos ======")
+print("\n====== Model Evaluation ======")
 future = future.dropna(subset=['Close'])  # aseguramos que Close no sea NaN
 
 evaluate_predictions(future['Close'], future['Close_Predicted_RF'], "Random Forest")

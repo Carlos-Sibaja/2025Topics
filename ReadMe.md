@@ -1,7 +1,7 @@
 # **News Sentiment and Stock Market Prediction**
 
 <p align="center">
-  <img src="98_images/cover.png" alt="Project Cover" width="300">
+  <img src="98_images/cover.png" alt="Project Cover" width="500">
 </p>
 
 ## **Executive Summary**
@@ -52,7 +52,8 @@ Improve stock market prediction beyond traditional technical analysis by incorpo
 ---
 
 ## **Main Results**
-| **Metric**       | **Final Model (Real 2025)** |
+
+| **Metric**        | **Final Model (Real 2025)** |
 |-------------------|-----------------------------|
 | **Accuracy (DA)** | 60.38%                      |
 | **Precision**     | 52.78%                      |
@@ -65,14 +66,15 @@ Improve stock market prediction beyond traditional technical analysis by incorpo
 ---
 
 ## **Challenges**
-1. **News Availability**: 99% of the news was from one period due to legacy issues with news availability outside major events.
+1. **News Availability**: Blocking.
 2. **Overfitting Risk**: Solved with feature selection and parameter tuning.
 3. **Low Volatility Periods**: Difficult to detect market movements during these times.
-4. **Class Imbalance**: Solved using `scale_pos_weight`.
+
 
 ---
 
 ## **Areas of Improvement**
+
 1. **Expand News Sources**: Broaden scraping beyond "Trump" to include broader market topics.
 2. **Improve Sentiment Accuracy**: Further clean noisy news articles for better sentiment extraction.
 3. **Enhance Model Robustness**: Apply ensemble models combining multiple thresholds and deploy dynamic regularization and feature selection.
@@ -101,26 +103,26 @@ Improve stock market prediction beyond traditional technical analysis by incorpo
 ---
 
 ## **Main Documents and Their Use**
-| **File**                      |   **Use**                                                  |
-| `1M_nasdaq_extractor.py`      | Download NASDAQ historical data and calculate technical indicators.         |
-| `2M_news_scraping.py`         | Scrape news articles related to "Trump" using GNews API.                   |
-| `2M_scraped_news.csv`         | Saved scraped news.                                                        |
-| `3M_sentiment_analysis.py`    | Perform sentiment analysis and create lagged sentiment features.           |
-| `3M_nasdaq_sentiment.csv`     | NASDAQ data with added sentiment features.                                 |
-| `4M_Final Model.py`           | First model using all 18 variables.                                        |
-| `4M_Final Model Improved.py`  | Improved model using selected features after redundancy analysis.          |
+| **File**                      |   **Use**                                                           |
+| `1M_nasdaq_extractor.py`      | Download NASDAQ historical data and calculate technical indicators. |
+| `2M_news_scraping.py`         | Scrape news articles related to "Trump" using GNews API.            |
+| `2M_scraped_news.csv`         | Saved scraped news.                                                 |
+| `3M_sentiment_analysis.py`    | Perform sentiment analysis and create lagged sentiment features.    |
+| `3M_nasdaq_sentiment.csv`     | NASDAQ data with added sentiment features.                          |
+| `4M_Final Model.py`           | First model using all 18 variables.                                 |
+| `4M_Final Model Improved.py`  | Improved model using selected features after redundancy analysis.   |
 
----
+
 
 ## **Technical Variables Selected and Why**
-| **Feature**            | **Reason for Selection**                                                       |
-|-------------------------|---------------------------------------------------------------------------------|
-| `Close_lag2`           | Capture price omentum.                                                        |
-| `Volatility`           | Measure market  variability.                                                    |
-| `OBV`                  | Detect volume pressure.                                                        |
-| `ADX_14`               | Capture trend strength.                                                        |
-| `VWAP_lag1`, `VWAP_lag2` | Detect price imbalance vs. volume-weighted average.                            |
-| `Sentiment_3DayAVG_new` | Aggregate news sentiment impact over 3 days.                                   |
+| **Feature**                | **Reason for Selection**         |
+|-------------------------   |----------------------------------|
+| `Close_lag2`               | Capture price omentum.           |
+| `Volatility`               | Measure market  variability.     |
+| `OBV`                      | Detect volume pressure.          |
+| `ADX_14`                   | Capture trend strength.          |
+| `VWAP_lag1`, `VWAP_lag2`   | Detect price imbalance vs. VWA   |
+| `Sentiment_3DayAVG_new`    | Add news sentiment impact 3 days |
 
 ❗ Some technical indicators (like ATR, RSI, MACD) were initially included but trimmed based on redundancy analysis.
 

@@ -121,7 +121,7 @@ pred_val = model.predict(X_val)
 
 # For Real Prediction 2025, adjust the threshold
 y_real_proba = model.predict_proba(X_real)[:, 1]
-threshold = 0.50
+threshold = 0.38
 pred_real = (y_real_proba > threshold).astype(int)
 print(threshold)
 

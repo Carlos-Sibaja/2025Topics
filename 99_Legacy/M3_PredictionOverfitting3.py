@@ -8,7 +8,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_a
 from sklearn.preprocessing import StandardScaler
 
 # ===== Load Dataset =====
-data = pd.read_csv('nasdaq_data.csv', parse_dates=['Date'], index_col='Date')
+data = pd.read_csv('1M_nasdaq_data.csv', parse_dates=['Date'], index_col='Date')
 data.index = pd.to_datetime(data.index, utc=True)
 data.index = data.index.tz_convert(None)
 data = data.drop(columns=['Close_Predicted_RF', 'Close_Predicted_XGB'], errors='ignore')

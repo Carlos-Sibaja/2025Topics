@@ -60,7 +60,7 @@ selected_features = [
     'Close_lag2',
     'Volatility', 'OBV', 'ATR_14', 'ADX_14',
     'VWAP_lag1', 'VWAP_lag2',
-    'Sentiment_T1','Sentiment_T2', 'Sentiment_T3',
+    #'Sentiment_T1','Sentiment_T2', 'Sentiment_T3',
     'Sentiment_3DayAVG',
 ]
 
@@ -118,7 +118,7 @@ pred_val = model.predict(X_val)
 
 # For Real Prediction 2025, adjust the threshold
 y_real_proba = model.predict_proba(X_real)[:, 1]
-threshold = 0.485
+threshold = 0.58
 pred_real = (y_real_proba > threshold).astype(int)
 print(threshold)
 
@@ -126,7 +126,7 @@ print(threshold)
 # Show Results
 # ===============================
 result = pd.DataFrame({
-    "Training (2022-2023)": get_classification_metrics(y_train, pred_train),
+    "Training (2023)": get_classification_metrics(y_train, pred_train),
     "Validation (2024)": get_classification_metrics(y_val, pred_val),
     "Real Prediction (2025)": get_classification_metrics(y_real, pred_real)
 })

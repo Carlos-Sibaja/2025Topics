@@ -1,26 +1,13 @@
 #M3_predicrtion6
 import pandas as pd
 import numpy as np
-from xgboost import XGBRegressor
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-from sklearn.preprocessing import StandardScaler
-
-import pandas as pd
-import numpy as np
-import xgboost as xgb
-from xgboost import XGBRegressor
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-from sklearn.preprocessing import StandardScaler
-
-import pandas as pd
-import numpy as np
 import xgboost as xgb
 from xgboost import XGBRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.preprocessing import StandardScaler
 
 # Load the dataset (assumes 'nasdaq_data.csv' is available with the required columns)
-data = pd.read_csv('nasdaq_data.csv', parse_dates=['Date'], index_col='Date')
+data = pd.read_csv('1M_nasdaq_data.csv', parse_dates=['Date'], index_col='Date')
 data.index = pd.to_datetime(data.index, utc=True)
 data.index = data.index.tz_convert(None)
 
