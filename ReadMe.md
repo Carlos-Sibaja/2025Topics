@@ -104,6 +104,7 @@ Improve stock market prediction beyond traditional technical analysis by incorpo
 
 ## **Main Documents and Their Use**
 | **File**                      |   **Use**                                                           |
+|----------------------------   |---------------------------------------------------------------------|
 | `1M_nasdaq_extractor.py`      | Download NASDAQ historical data and calculate technical indicators. |
 | `2M_news_scraping.py`         | Scrape news articles related to "Trump" using GNews API.            |
 | `2M_scraped_news.csv`         | Saved scraped news.                                                 |

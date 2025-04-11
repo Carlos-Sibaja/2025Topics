@@ -7,7 +7,7 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import ta  # Make sure you have installed it: pip install ta
+import ta
 
 # ===============================
 # Download historical data for NASDAQ
